@@ -103,7 +103,7 @@
         }
 
         .container {
-            max-width: 800px; /* Aumentado um pouco para telas maiores */
+            max-width: 800px;
             margin: auto;
             padding: 20px;
         }
@@ -113,11 +113,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* NOVO CABEÇALHO (TÍTULO E BOTÕES NA MESMA LINHA) */
+        /* CABEÇALHO */
         .header-linha {
             display: flex;
             justify-content: space-between; 
-            align-items: flex-start;
+            align-items: center; /* CORREÇÃO AQUI! */
             margin-bottom: 20px;
             gap: 15px;
         }
@@ -335,6 +335,18 @@
             border-radius: 6px;
             font-size: 10px;
             font-weight: 800;
+        }
+
+        /* ESTILOS PARA O DIAPASÃO */
+        .tom-clicavel {
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0, 0.1);
+        }
+
+        .tom-clicavel:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
         }
 
         .badge-bpm {
@@ -724,6 +736,17 @@
         .fs-close { background: var(--border); color: var(--text); flex: 1; }
         .fs-trash { background: rgba(239, 68, 68, 0.1); color: var(--error); flex: 1; }
         
+        .fs-nav-btn {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            flex: 1;
+        }
+
+        .fs-nav-btn:hover {
+            background: var(--border);
+        }
+
         .sidebar-box {
             background: var(--bg);
             padding: 15px;
@@ -959,8 +982,10 @@
 <div id="fullscreen-photo">
     <div class="fs-sidebar">
         <div class="fs-controls-top">
-            <button class="fs-btn-side fs-close" onclick="closeFullscreen()" title="Fechar"><i data-lucide="x"></i> Fechar</button>
-            <button class="fs-btn-side fs-trash" onclick="removePhotoFullscreen()" title="Apagar Foto da Cifra"><i data-lucide="trash-2"></i> Apagar</button>
+            <button class="fs-btn-side fs-nav-btn" onclick="navegarCifra(-1)" title="Cifra Anterior"><i data-lucide="chevron-left"></i></button>
+            <button class="fs-btn-side fs-close" onclick="closeFullscreen()" title="Fechar Cifra"><i data-lucide="x"></i></button>
+            <button class="fs-btn-side fs-nav-btn" onclick="navegarCifra(1)" title="Próxima Cifra"><i data-lucide="chevron-right"></i></button>
+            <button class="fs-btn-side fs-trash" style="flex: 0.5; padding: 12px 0;" onclick="removePhotoFullscreen()" title="Apagar Foto da Cifra"><i data-lucide="trash-2"></i></button>
         </div>
         
         <div class="fs-controls-bottom">
@@ -1069,11 +1094,11 @@
 
 <script>
     const escalaPadrao = [
-        { momento: "Entrada", nome: "Nós Nos Gloriamos na Cruz", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=xgBKXAwFOiw", cifraLink: "", foto: null },
-        { momento: "Ato Penitencial", nome: "Confesso a Deus", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=WZzaao5oPEA", cifraLink: "", foto: null },
+        { momento: "Entrada", nome: "Nós Nos Gloriamos na Cruz", tom: "C", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=xgBKXAwFOiw", cifraLink: "", foto: null },
+        { momento: "Ato Penitencial", nome: "Confesso a Deus", tom: "Em", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=WZzaao5oPEA", cifraLink: "", foto: null },
         { momento: "Ato Penitencial (2)", nome: "Kyrie Eleison", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=Tdm8MHfEzTE", cifraLink: "", foto: null },
         { momento: "Glória", nome: "Glória a Deus nas alturas", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=PuxYzdksJzI", cifraLink: "", foto: null },
-        { momento: "Aclamação", nome: "Quero Ouvir Tua Palavra", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=38uj83KY9Nc", cifraLink: "", foto: null },
+        { momento: "Aclamação", nome: "Quero Ouvir Tua Palavra", tom: "G", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=38uj83KY9Nc", cifraLink: "", foto: null },
         { momento: "Lava Pés", nome: "Jesus erguendo-se da ceia", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=JbEJ1Zwh5XI", cifraLink: "", foto: null },
         { momento: "Ofertório", nome: "Em Teu Abraço", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=nAaGBdjdX9g", cifraLink: "", foto: null },
         { momento: "Santo", nome: "Sanctus", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=A_5x--UdnRI", cifraLink: "", foto: null },
@@ -1190,9 +1215,11 @@
                 : `<button class="action-add-photo" onclick="openPhotoChoiceModal(${index})" title="Adicionar Cifra"><i data-lucide="camera"></i></button>`; 
 
             const urlCifra = m.cifraLink ? m.cifraLink : `https://www.cifraclub.com.br/?q=${encodeURIComponent(m.nome)}`;
-            const badgeTom = (m.tom && m.tom.trim() !== "") ? `<span class="badge-info">${m.tom}</span>` : ``;
-            const badgeBpm = (m.bpm && m.bpm.trim() !== "") ? `<span class="badge-bpm">${m.bpm} BPM</span>` : ``;
             
+            // ADICIONADO: Badge do Tom agora é clicável para emitir som!
+            const badgeTom = (m.tom && m.tom.trim() !== "") ? `<span class="badge-info tom-clicavel" onclick="playTom(event, '${m.tom}')" title="Ouvir o tom de referência">${m.tom}</span>` : ``;
+            
+            const badgeBpm = (m.bpm && m.bpm.trim() !== "") ? `<span class="badge-bpm">${m.bpm} BPM</span>` : ``;
             const divAnotacoes = (m.anotacoes && m.anotacoes.trim() !== "") ? `<div class="anotacoes-preview"><i data-lucide="sticky-note" style="width: 12px; height: 12px;"></i> ${m.anotacoes}</div>` : ``;
 
             html += `
@@ -1439,6 +1466,62 @@
             renderRepertorio(); 
             closeFullscreen();
         }
+    }
+
+    // --- NAVEGAÇÃO ENTRE CIFRAS (TELA CHEIA) ---
+    function navegarCifra(direcao) {
+        let novoIndex = indexAtual + direcao;
+        
+        // Procura a próxima música que tenha uma foto anexada
+        while(novoIndex >= 0 && novoIndex < escala.length) {
+            if(escala[novoIndex].foto) {
+                openFullscreen(novoIndex);
+                return;
+            }
+            novoIndex += direcao;
+        }
+        
+        // Se não achar mais nenhuma na direção que clicou
+        alert(direcao > 0 ? "Fim das cifras! Esta foi a última." : "Você já está na primeira cifra do repertório.");
+    }
+
+    // --- LÓGICA DO DIAPASÃO (TOM DE REFERÊNCIA) ---
+    const frequenciasNotas = {
+        'C': 261.63, 'C#': 277.18, 'Db': 277.18, 'D': 293.66, 'D#': 311.13, 'Eb': 311.13,
+        'E': 329.63, 'F': 349.23, 'F#': 369.99, 'Gb': 369.99, 'G': 392.00, 'G#': 415.30, 
+        'Ab': 415.30, 'A': 440.00, 'A#': 466.16, 'Bb': 466.16, 'B': 493.88
+    };
+
+    function playTom(event, tom) {
+        event.stopPropagation(); // Evita que clique em outras coisas sem querer
+        if (!tom) return;
+        
+        // Pega só a nota base (ignora o "m" de menor, "7" de sétima, etc)
+        let match = tom.match(/^[A-G][#b]?/);
+        if (!match) return;
+        
+        let freq = frequenciasNotas[match[0]];
+        if (!freq) return;
+
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.type = 'sine'; // Som suave
+        osc.frequency.value = freq;
+
+        // Efeito de Fade (Aumenta rápido, some aos poucos)
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.5);
+
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 2.5);
     }
 
     // --- LÓGICA DO METRÔNOMO MANUAL ---
