@@ -103,7 +103,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px; /* Aumentado um pouco para telas maiores */
             margin: auto;
             padding: 20px;
         }
@@ -113,17 +113,57 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 {
-            font-size: 34px;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin: 30px 0 5px;
+        /* NOVO CABEÇALHO (TÍTULO E BOTÕES NA MESMA LINHA) */
+        .header-linha {
+            display: flex;
+            justify-content: space-between; 
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 15px;
         }
 
-        .subtitle {
+        .titulos {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .titulos h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin: 0;
+        }
+
+        .titulos .subtitle {
             color: var(--text-light);
             font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 0;
+            margin-top: 5px;
+        }
+
+        .top-actions-container {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap; 
+            justify-content: flex-end;
+        }
+
+        .top-action-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            transition: 0.3s;
+        }
+
+        .top-action-btn:hover {
+            opacity: 0.8;
         }
         
         /* CARD E CALENDÁRIO */
@@ -363,29 +403,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* BOTÕES TOPO E FAB */
-        .top-action-btn {
-            position: absolute;
-            top: 25px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 8px;
-            border-radius: 10px;
-            color: var(--text);
-            cursor: pointer;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            transition: 0.3s;
-        }
-
-        #btn-theme { right: 20px; }
-        #btn-share { right: 68px; color: var(--success); }
-        #btn-missa { right: 116px; color: var(--primary); }
-
+        /* FAB (Botão Flutuante) */
         .fab-add {
             position: fixed;
             bottom: 95px;
@@ -413,6 +431,7 @@
         body.modo-missa .action-add-photo { display: none !important; }
         body.modo-missa .fab-add { display: none !important; }
         body.modo-missa #btn-add-bottom { display: none !important; }
+        body.modo-missa .import-export-container { display: none !important; }
         body.modo-missa #btn-missa {
             background: var(--primary);
             color: white;
@@ -422,7 +441,7 @@
         /* POP-UP DE LEMBRETE */
         .reminder-popup {
             position: fixed;
-            bottom: 165px;
+            bottom: 170px;
             right: 20px;
             background: var(--card);
             border-left: 4px solid var(--accent);
@@ -432,7 +451,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            z-index: 999;
+            z-index: 899;
             animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             transition: opacity 0.3s, transform 0.3s;
         }
@@ -500,7 +519,7 @@
             margin-bottom: 5px;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border);
@@ -509,6 +528,7 @@
             color: var(--text);
             font-size: 14px;
             font-family: 'Inter', sans-serif;
+            appearance: none; 
         }
 
         .form-group textarea { resize: vertical; min-height: 80px; }
@@ -604,6 +624,34 @@
         input[type="file"] { display: none; }
         .sortable-ghost { opacity: 0.4; background: var(--bg); }
 
+        /* BACKUP LAYOUT */
+        .import-export-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            padding-bottom: 20px;
+        }
+
+        .btn-backup {
+            background: transparent;
+            color: var(--text-light);
+            border: 1px dashed var(--border);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-backup:hover { background: var(--border); }
+        .btn-backup i { width: 18px; }
+
         /* TELA CHEIA E SIDEBAR FIXA PARA CIFRAS */
         #fullscreen-photo {
             display: none;
@@ -611,7 +659,7 @@
             inset: 0;
             background: var(--bg);
             z-index: 9999;
-            flex-direction: row; /* Coloca a sidebar ao lado da imagem no desktop */
+            flex-direction: row; 
         }
 
         .fs-image-area {
@@ -631,6 +679,7 @@
             min-height: 100%;
             object-fit: contain;
             display: block;
+            max-width: 100%;
         }
 
         .fs-sidebar {
@@ -766,7 +815,6 @@
             to { transform: scale(1.02); }
         }
 
-        /* MOBILE: SIDEBAR VIRA UM PAINEL NO TOPO/FUNDO DA TELA */
         @media (max-width: 768px) {
             #fullscreen-photo {
                 flex-direction: column;
@@ -779,8 +827,8 @@
                 border-right: none;
                 border-top: 1px solid var(--border);
                 gap: 10px;
-                order: 2; /* Sidebar vai para baixo no mobile */
-                max-height: 45vh; /* Ocupa até 45% da tela, resto é imagem */
+                order: 2; 
+                max-height: 45vh; 
             }
             .fs-controls-top {
                 margin-bottom: 5px;
@@ -789,12 +837,46 @@
                 max-height: 55vh;
             }
         }
+
+        /* MODO IMPRESSÃO (PDF) */
+        @media print {
+            body, body.dark-mode { 
+                background: #ffffff !important; 
+                color: #000000 !important; 
+                padding: 0; margin: 0; 
+            }
+            nav, .fab-add, .top-actions-container, #btn-add-bottom, .actions, .drag-handle, .import-export-container, .reminder-popup { 
+                display: none !important; 
+            }
+            #calendario { display: none !important; }
+            #repertorio { display: block !important; padding: 0; margin: 0; }
+            .card { border: none !important; box-shadow: none !important; padding: 0 !important; background: transparent !important; }
+            .item-musica { 
+                border-bottom: 1px solid #ccc !important; 
+                page-break-inside: avoid; 
+                padding: 10px 0 !important;
+                background: transparent !important;
+            }
+            .badge-info, .badge-bpm { 
+                border: 1px solid #000 !important; 
+                background: transparent !important; 
+                color: #000 !important; 
+            }
+            .anotacoes-preview {
+                background: transparent !important;
+                border: 1px dashed #ccc !important;
+                color: #000 !important;
+            }
+            .titulos h1, .titulos .subtitle { text-align: center; }
+            .momento { color: #000 !important; }
+        }
     </style>
 </head>
 <body>
 
 <input type="file" id="file-upload-gallery" accept="image/*" onchange="handleFileUpload(event)">
 <input type="file" id="file-upload-camera" accept="image/*" capture="environment" onchange="handleFileUpload(event)">
+<input type="file" id="import-file" accept=".json" style="display: none;" onchange="importarRepertorio(event)">
 
 <div id="photo-choice-modal" class="modal-overlay">
     <div class="modal-content center" style="max-width: 320px;">
@@ -829,10 +911,20 @@
                 <label>Momento da Missa</label>
                 <input type="text" id="edit-momento" placeholder="Ex: Entrada">
             </div>
+            
             <div class="form-group" style="flex: 1;">
                 <label>Tom</label>
-                <input type="text" id="edit-tom" placeholder="Ex: G">
+                <select id="edit-tom">
+                    <option value="">--</option>
+                    <optgroup label="Maiores">
+                        <option value="C">C</option><option value="C#">C#</option><option value="Db">Db</option><option value="D">D</option><option value="D#">D#</option><option value="Eb">Eb</option><option value="E">E</option><option value="F">F</option><option value="F#">F#</option><option value="Gb">Gb</option><option value="G">G</option><option value="G#">G#</option><option value="Ab">Ab</option><option value="A">A</option><option value="A#">A#</option><option value="Bb">Bb</option><option value="B">B</option>
+                    </optgroup>
+                    <optgroup label="Menores">
+                        <option value="Cm">Cm</option><option value="C#m">C#m</option><option value="Dbm">Dbm</option><option value="Dm">Dm</option><option value="D#m">D#m</option><option value="Ebm">Ebm</option><option value="Em">Em</option><option value="Fm">Fm</option><option value="F#m">F#m</option><option value="Gbm">Gbm</option><option value="Gm">Gm</option><option value="G#m">G#m</option><option value="Abm">Abm</option><option value="Am">Am</option><option value="A#m">A#m</option><option value="Bbm">Bbm</option><option value="Bm">Bm</option>
+                    </optgroup>
+                </select>
             </div>
+
             <div class="form-group" style="flex: 1;">
                 <label>BPM</label>
                 <input type="number" id="edit-bpm" placeholder="Ex: 68">
@@ -913,19 +1005,41 @@
 </div>
 
 <div class="container">
-    <button class="top-action-btn" id="btn-missa" onclick="toggleModoMissa()" title="Modo Missa (Oculta edições)"><i data-lucide="eye-off" id="icon-missa"></i></button>
-    <button class="top-action-btn" id="btn-share" onclick="shareWhatsApp()" title="Partilhar no WhatsApp"><i data-lucide="share-2"></i></button>
-    <button class="top-action-btn" id="btn-theme" onclick="toggleTheme()" title="Trocar Tema"><i data-lucide="moon" id="t-icon"></i></button>
-
     <div id="repertorio" class="page active">
-        <h1>Repertório</h1>
-        <p class="subtitle">Lava Pés • Quinta-feira Santa</p>
+        <div class="header-linha">
+            <div class="titulos">
+                <h1>Repertório</h1>
+                <p class="subtitle">Lava Pés • Quinta-feira Santa</p>
+            </div>
+            
+            <div class="top-actions-container">
+                <button class="top-action-btn" onclick="window.print()" title="Imprimir / PDF"><i data-lucide="printer"></i></button>
+                <button class="top-action-btn" id="btn-missa" onclick="toggleModoMissa()" title="Modo Missa (Oculta edições)"><i data-lucide="eye-off" id="icon-missa"></i></button>
+                <button class="top-action-btn" onclick="shareWhatsApp()" title="Partilhar no WhatsApp"><i data-lucide="share-2" style="color: var(--success);"></i></button>
+                <button class="top-action-btn" onclick="toggleTheme()" title="Trocar Tema"><i data-lucide="moon" id="t-icon"></i></button>
+            </div>
+        </div>
+        
         <div id="escala-fixa-container"></div>
+        
+        <div class="import-export-container">
+            <button class="btn-backup" onclick="exportarRepertorio()">
+                <i data-lucide="download"></i> Salvar Backup
+            </button>
+            <button class="btn-backup" onclick="document.getElementById('import-file').click()">
+                <i data-lucide="upload"></i> Abrir Backup
+            </button>
+        </div>
     </div>
 
     <div id="calendario" class="page">
-        <h1>Calendário</h1>
-        <p class="subtitle">Programação e Datas</p>
+        <div class="header-linha">
+            <div class="titulos">
+                <h1>Calendário</h1>
+                <p class="subtitle">Programação e Datas</p>
+            </div>
+        </div>
+
         <div class="card calendar-card">
             <div class="cal-header">
                 <button onclick="changeMonth(-1)"><i data-lucide="chevron-left" style="width: 20px;"></i></button>
@@ -972,7 +1086,7 @@
         { momento: "A Ele a Glória", nome: "A Ele a Glória", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=PRwul_3TMlY", cifraLink: "", foto: null }
     ];
 
-    let escala = JSON.parse(localStorage.getItem('meuRepertorio_v7')) || escalaPadrao;
+    let escala = JSON.parse(localStorage.getItem('meuRepertorio_v8')) || escalaPadrao;
     let indexAtual = -1; 
     let tempPhotoBase64 = null; 
     let photoContext = 'edit'; 
@@ -988,11 +1102,14 @@
     let metronomeTimer = null;
     let isBpmPlaying = false;
 
+    // Variável de Bloqueio de Tela (Wake Lock)
+    let wakeLock = null;
+
     function salvarDadosLocal() {
         try { 
-            localStorage.setItem('meuRepertorio_v7', JSON.stringify(escala)); 
+            localStorage.setItem('meuRepertorio_v8', JSON.stringify(escala)); 
         } catch (e) { 
-            alert("A memória do telemóvel está cheia! Tente apagar algumas fotos de cifras antigas."); 
+            alert("A memória do aparelho está cheia! Tente apagar algumas fotos de cifras antigas."); 
         }
     }
 
@@ -1008,6 +1125,46 @@
             icon.setAttribute('data-lucide', 'eye-off'); 
         }
         lucide.createIcons();
+    }
+
+    // --- IMPORTAR E EXPORTAR REPERTÓRIO ---
+    function exportarRepertorio() {
+        const dataStr = JSON.stringify(escala);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'repertorio_quinta_santa.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    function importarRepertorio(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const importedData = JSON.parse(e.target.result);
+                if (Array.isArray(importedData)) {
+                    if (confirm("Isso irá substituir todo o seu repertório atual pelo do arquivo. Deseja continuar?")) {
+                        escala = importedData;
+                        salvarDadosLocal();
+                        renderRepertorio();
+                        alert("Repertório importado com sucesso!");
+                    }
+                } else {
+                    alert("Arquivo inválido. Certifique-se de que é um backup do repertório.");
+                }
+            } catch (error) {
+                alert("Erro ao ler o arquivo. Ele pode estar corrompido.");
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = ''; 
     }
 
     function shareWhatsApp() {
@@ -1056,7 +1213,7 @@
         });
         html += '</div>';
 
-        html += `<button id="btn-add-bottom" class="btn-primary" style="margin-top: 20px; font-size: 15px;" onclick="adicionarMusica()"><i data-lucide="plus" style="width: 20px; margin-right: 8px;"></i> Adicionar Nova Música</button>`;
+        html += `<button id="btn-add-bottom" class="btn-primary" style="margin-top: 20px; font-size: 15px; width: 100%;" onclick="adicionarMusica()"><i data-lucide="plus" style="width: 20px; margin-right: 8px;"></i> Adicionar Nova Música</button>`;
         document.getElementById('escala-fixa-container').innerHTML = html;
         lucide.createIcons();
         initDragAndDrop(); 
@@ -1210,6 +1367,29 @@
         }
     }
 
+    // --- BLOQUEIO DE TELA (WAKE LOCK) ---
+    async function solicitarWakeLock() {
+        try {
+            if ('wakeLock' in navigator) {
+                wakeLock = await navigator.wakeLock.request('screen');
+            }
+        } catch (err) {
+            console.log(`Wake Lock Error: ${err.message}`);
+        }
+    }
+
+    function liberarWakeLock() {
+        if (wakeLock !== null) {
+            wakeLock.release().then(() => { wakeLock = null; });
+        }
+    }
+
+    document.addEventListener('visibilitychange', async () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') {
+            solicitarWakeLock();
+        }
+    });
+
     // --- TELA CHEIA (SIDEBAR FIXA) ---
     function openFullscreen(index) {
         indexAtual = index;
@@ -1223,11 +1403,10 @@
             scrollAccumulator = 0; 
             pararAutoScroll(); 
             pararMetronomo();
+            solicitarWakeLock(); 
 
-            // Preenche o input do BPM com o valor salvo na música
             document.getElementById('manual-bpm-input').value = musica.bpm || "";
 
-            // Configura o YouTube Player Fixo
             const ytEmbedUrl = getYouTubeEmbedUrl(musica.yt);
             const ytIframe = document.getElementById('fs-yt-iframe');
             const ytEmpty = document.getElementById('yt-empty-msg');
@@ -1247,9 +1426,10 @@
     function closeFullscreen() {
         document.getElementById('fullscreen-photo').style.display = 'none';
         document.getElementById('fullscreen-img').src = "";
-        document.getElementById('fs-yt-iframe').src = ""; // Para o vídeo do YT
+        document.getElementById('fs-yt-iframe').src = ""; 
         pararAutoScroll(); 
         pararMetronomo();
+        liberarWakeLock(); 
     }
 
     function removePhotoFullscreen() {
@@ -1272,7 +1452,7 @@
         osc.connect(gainNode); 
         gainNode.connect(audioCtx.destination);
         
-        osc.frequency.value = 800; // Frequência do bipe
+        osc.frequency.value = 800; 
         osc.type = 'sine';
         
         gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
@@ -1297,7 +1477,7 @@
             }
             
             const intervalMs = 60000 / bpm; 
-            playBeep(); // Toca o primeiro bipe imediatamente
+            playBeep(); 
             
             metronomeTimer = setInterval(playBeep, intervalMs);
             isBpmPlaying = true;
