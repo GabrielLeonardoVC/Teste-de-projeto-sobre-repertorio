@@ -16,66 +16,216 @@
     
     <style>
         :root {
-            --primary: #2563eb; --accent: #d4af37; --bg: #ffffff;
-            --card: #f3f4f6; --text: #111827; --text-light: #6b7280;
-            --error: #ef4444; --success: #10b981; --border: rgba(0,0,0,0.08);
+            --primary: #2563eb;
+            --accent: #d4af37;
+            --bg: #ffffff;
+            --card: #f3f4f6;
+            --text: #111827;
+            --text-light: #6b7280;
+            --error: #ef4444;
+            --success: #10b981;
+            --border: rgba(0,0,0,0.08);
         }
 
         .dark-mode {
-            --bg: #000000; --card: #1c1c1e; --text: #ffffff;
-            --text-light: #8e8e93; --primary: #0a84ff; --border: rgba(255,255,255,0.1);
+            --bg: #000000;
+            --card: #1c1c1e;
+            --text: #ffffff;
+            --text-light: #8e8e93;
+            --primary: #0a84ff;
+            --border: rgba(255,255,255,0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); transition: background 0.3s; padding-bottom: 90px; overflow-x: hidden; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background 0.3s;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
 
         /* NAVEGAÇÃO BOTTOM */
         nav {
-            display: flex; justify-content: space-around; align-items: center;
-            position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: rgba(var(--bg), 0.85); backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border); z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 75px;
+            background: rgba(var(--bg), 0.85);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom);
         }
+
         nav button {
-            background: none; border: none; color: var(--text-light);
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; font-size: 11px; font-weight: 600; transition: 0.3s; width: 50%;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: 0.3s;
+            width: 50%;
         }
-        nav button.active { color: var(--accent); }
-        nav button i { width: 24px; height: 24px; }
+
+        nav button.active {
+            color: var(--accent);
+        }
+
+        nav button i {
+            width: 24px;
+            height: 24px;
+        }
 
         /* PÁGINAS */
-        .page { display: none; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .page.active { display: block; }
+        .page {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        /* CONTAINER DA PÁGINA */
-        .container { max-width: 600px; margin: auto; padding: 20px; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active {
+            display: block;
+        }
 
-        h1 { font-size: 34px; font-weight: 800; letter-spacing: -1.5px; margin: 30px 0 5px; }
-        .subtitle { color: var(--text-light); font-weight: 500; margin-bottom: 20px; }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin: 30px 0 5px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
         
-        /* CARD PRINCIPAL */
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid var(--border); }
-        .card-repertorio { border-left: 5px solid var(--accent); margin-top: 15px; }
+        /* CARD E CALENDÁRIO */
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card-repertorio {
+            border-left: 5px solid var(--accent);
+            margin-top: 15px;
+        }
         
-        /* CALENDÁRIO E LEGENDA */
-        .calendar-card { margin-top: 20px; margin-bottom: 15px; }
-        .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .cal-header h3 { margin: 0; font-size: 16px; font-weight: 800; text-transform: capitalize; }
-        .cal-header button { background: var(--border); border: none; cursor: pointer; color: var(--text); border-radius: 8px; padding: 6px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 10px; }
-        .cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; border-radius: 50%; transition: 0.2s; }
+        .calendar-card {
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .cal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .cal-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+
+        .cal-header button {
+            background: var(--border);
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            border-radius: 8px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .cal-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .cal-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+
         .cal-day.empty { background: transparent; }
-        
-        /* Cores dos Dias no Calendário */
         .cal-day.today { border: 2px solid var(--primary); font-weight: 800; }
-        .cal-day.ensaio { background: var(--accent); color: #fff; font-weight: 800; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4); }
-        .cal-day.missa { background: var(--error); color: #fff; font-weight: 800; box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4); }
         
-        /* Cores da Legenda */
-        .cal-legend { display: flex; justify-content: center; gap: 12px; margin-top: 20px; font-size: 11px; font-weight: 600; color: var(--text-light); flex-wrap: wrap; }
+        .cal-day.ensaio {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);
+        }
+
+        .cal-day.missa {
+            background: var(--error);
+            color: #fff;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .cal-legend {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            flex-wrap: wrap;
+        }
+
         .legend-item { display: flex; align-items: center; gap: 5px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
         .today-dot { background: var(--primary); }
@@ -83,97 +233,562 @@
         .missa-dot { background: var(--error); }
         
         /* LISTA DE MÚSICAS */
-        .item-musica { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); background: var(--card); }
-        .item-musica:last-child { border-bottom: none; padding-bottom: 0; }
+        .item-musica {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--card);
+        }
+
+        .item-musica:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
         
-        .drag-handle { cursor: grab; color: var(--text-light); padding-right: 12px; width: 28px; height: 28px; opacity: 0.5; }
+        .drag-handle {
+            cursor: grab;
+            color: var(--text-light);
+            padding-right: 12px;
+            width: 28px;
+            height: 28px;
+            opacity: 0.5;
+        }
+
         .drag-handle:active { cursor: grabbing; }
 
-        .info-musica { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-right: 10px; }
-        .momento { font-size: 11px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-musica {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .momento {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
         
-        .nome-container { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .nome-musica { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.2; }
-        .badge-info { background: var(--primary); color: white; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 800; }
-        .badge-bpm { background: var(--text-light); color: white; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 800; }
+        .nome-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
 
-        .anotacoes-preview { font-size: 11px; font-weight: 500; color: var(--text-light); display: flex; align-items: flex-start; gap: 4px; margin-top: 4px; background: rgba(0,0,0,0.04); padding: 6px 8px; border-radius: 6px; }
-        .dark-mode .anotacoes-preview { background: rgba(255,255,255,0.05); }
+        .nome-musica {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.2;
+        }
 
-        .actions { display: flex; gap: 10px; align-items: center; }
-        .actions button { color: var(--text); background: none; border: none; cursor: pointer; transition: 0.2s; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        .badge-info {
+            background: var(--primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .badge-bpm {
+            background: var(--text-light);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .anotacoes-preview {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-light);
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+            margin-top: 4px;
+            background: rgba(0,0,0,0.04);
+            padding: 6px 8px;
+            border-radius: 6px;
+        }
+
+        .dark-mode .anotacoes-preview {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .actions button {
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .actions button:hover { opacity: 0.7; }
         .btn-youtube { color: #ef4444 !important; }
         
-        .cifra-logo { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; }
-        .dark-mode .cifra-logo { filter: brightness(0.9); }
+        .cifra-logo {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
 
-        /* MINIATURA DA FOTO DA CIFRA */
-        .cifra-thumb { width: 22px; height: 22px; border-radius: 4px; object-fit: cover; border: 1px solid var(--border); display: block; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .dark-mode .cifra-logo { filter: brightness(0.9); }
+        
+        .cifra-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            display: block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
         /* BOTÕES TOPO E FAB */
-        .top-action-btn { position: absolute; top: 25px; background: var(--card); border: 1px solid var(--border); padding: 8px; border-radius: 10px; color: var(--text); cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; transition: 0.3s;}
+        .top-action-btn {
+            position: absolute;
+            top: 25px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 10px;
+            color: var(--text);
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            transition: 0.3s;
+        }
+
         #btn-theme { right: 20px; }
         #btn-share { right: 68px; color: var(--success); }
         #btn-missa { right: 116px; color: var(--primary); }
 
-        .fab-add { position: fixed; bottom: 95px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: white; border: none; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 900; transition: 0.3s; }
+        .fab-add {
+            position: fixed;
+            bottom: 95px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 900;
+            transition: 0.3s;
+        }
+
         .fab-add:hover { transform: scale(1.05); }
 
-        /* MODO MISSA (Esconde as ferramentas de edição) */
+        /* MODO MISSA */
         body.modo-missa .drag-handle { display: none !important; }
         body.modo-missa .action-edit { display: none !important; }
         body.modo-missa .action-add-photo { display: none !important; }
         body.modo-missa .fab-add { display: none !important; }
         body.modo-missa #btn-add-bottom { display: none !important; }
-        body.modo-missa #btn-missa { background: var(--primary); color: white; border-color: var(--primary); }
+        body.modo-missa #btn-missa {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
         /* POP-UP DE LEMBRETE */
         .reminder-popup {
-            position: fixed; bottom: 95px; right: 20px; background: var(--card); border-left: 4px solid var(--accent); border-radius: 12px; padding: 12px 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; z-index: 999; animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1); transition: opacity 0.3s, transform 0.3s;
+            position: fixed;
+            bottom: 165px;
+            right: 20px;
+            background: var(--card);
+            border-left: 4px solid var(--accent);
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 999;
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.3s, transform 0.3s;
         }
-        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
         .reminder-content { display: flex; flex-direction: column; }
         .reminder-title { font-size: 13px; font-weight: 800; color: var(--text); }
         .reminder-desc { font-size: 11px; font-weight: 500; color: var(--text-light); margin-top: 2px; }
         .reminder-close { background: none; border: none; color: var(--text-light); cursor: pointer; margin-left: auto; }
         
-        /* MODAIS REUTILIZÁVEIS */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 5000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; backdrop-filter: blur(4px); animation: fadeIn 0.2s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content { background: var(--bg); padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: left; max-height: 90vh; overflow-y: auto; }
+        /* MODAIS */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 5000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg);
+            padding: 25px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            text-align: left;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
         .modal-content.center { text-align: center; }
-        .modal-content h2 { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: var(--text); }
+        
+        .modal-content h2 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
         
         .form-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .form-group { margin-bottom: 15px; flex: 1; }
-        .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
-        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); color: var(--text); font-size: 14px; font-family: 'Inter', sans-serif; }
+        
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+        }
+
         .form-group textarea { resize: vertical; min-height: 80px; }
         
-        .photo-edit-area { background: var(--card); border: 1px dashed var(--border); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 15px; }
-        #edit-photo-preview { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: none; margin-bottom: 5px; }
-        .photo-status { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 5px; }
+        .photo-edit-area {
+            background: var(--card);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #edit-photo-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: none;
+            margin-bottom: 5px;
+        }
+
+        .photo-status {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
         .photo-status.has-photo { color: var(--success); }
         
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .btn-primary { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; display: flex; justify-content: center; align-items: center; flex: 1; min-width: 120px;}
-        .btn-secondary { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 14px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; display: flex; justify-content: center; align-items: center; flex: 1; min-width: 120px;}
-        .btn-danger { background: #fee2e2; color: var(--error); border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 5px; }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-secondary {
+            background: var(--card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: var(--error);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
         .dark-mode .btn-danger { background: rgba(239, 68, 68, 0.2); }
-
         input[type="file"] { display: none; }
-
-        /* VISUALIZADOR DE FOTO EM TELA CHEIA E SCROLL AUTOMÁTICO */
-        #fullscreen-photo { display: none; position: fixed; inset: 0; background: #000000; z-index: 9999; overflow-y: auto; overflow-x: hidden; text-align: center; scroll-behavior: smooth; }
-        #fullscreen-img { width: 100%; height: auto; min-height: 100%; object-fit: contain; display: block; }
-        .fs-btn { position: fixed; width: 48px; height: 48px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px); color: white; z-index: 10000; transition: 0.3s; }
-        .fs-close { top: 20px; right: 20px; background: rgba(255,255,255,0.2); }
-        .fs-trash { top: 20px; left: 20px; background: rgba(239, 68, 68, 0.6); }
-        .fs-scroll { bottom: 30px; right: 20px; background: var(--primary); width: 60px; height: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .fs-scroll.playing { background: var(--success); }
-
         .sortable-ghost { opacity: 0.4; background: var(--bg); }
+
+        /* TELA CHEIA E SIDEBAR FIXA PARA CIFRAS */
+        #fullscreen-photo {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            flex-direction: row; /* Coloca a sidebar ao lado da imagem no desktop */
+        }
+
+        .fs-image-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            text-align: center;
+            scroll-behavior: smooth;
+            position: relative;
+            padding: 15px;
+            background: #000;
+        }
+
+        #fullscreen-img {
+            width: 100%;
+            height: auto;
+            min-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .fs-sidebar {
+            width: 320px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            z-index: 10000;
+            overflow-y: auto;
+        }
+
+        .fs-controls-top {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .fs-controls-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .fs-btn-side {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .fs-close { background: var(--border); color: var(--text); flex: 1; }
+        .fs-trash { background: rgba(239, 68, 68, 0.1); color: var(--error); flex: 1; }
+        
+        .sidebar-box {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        .sidebar-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        #speed-slider {
+            width: 100%;
+            cursor: pointer;
+            accent-color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .fs-scroll {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .fs-scroll.playing {
+            background: var(--success);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* METRÔNOMO MANUAL FIXO NA SIDEBAR */
+        .fs-metronome {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .fs-metronome.playing {
+            background: var(--accent);
+            color: #fff;
+            animation: pulse 1s infinite alternate;
+        }
+
+        .bpm-input {
+            width: 80px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+
+        /* YOUTUBE FIXO NA SIDEBAR */
+        #yt-sidebar-player {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .yt-header {
+            background: var(--border);
+            padding: 10px 15px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .yt-empty-msg {
+            padding: 25px 15px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+
+        /* MOBILE: SIDEBAR VIRA UM PAINEL NO TOPO/FUNDO DA TELA */
+        @media (max-width: 768px) {
+            #fullscreen-photo {
+                flex-direction: column;
+            }
+            .fs-sidebar {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+                flex-direction: column;
+                border-right: none;
+                border-top: 1px solid var(--border);
+                gap: 10px;
+                order: 2; /* Sidebar vai para baixo no mobile */
+                max-height: 45vh; /* Ocupa até 45% da tela, resto é imagem */
+            }
+            .fs-controls-top {
+                margin-bottom: 5px;
+            }
+            .fs-image-area {
+                max-height: 55vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -250,21 +865,49 @@
 </div>
 
 <div id="fullscreen-photo">
-    <button class="fs-btn fs-trash" onclick="removePhotoFullscreen()" title="Apagar Foto da Cifra"><i data-lucide="trash-2"></i></button>
-    <button class="fs-btn fs-close" onclick="closeFullscreen()" title="Fechar"><i data-lucide="x"></i></button>
+    <div class="fs-sidebar">
+        <div class="fs-controls-top">
+            <button class="fs-btn-side fs-close" onclick="closeFullscreen()" title="Fechar"><i data-lucide="x"></i> Fechar</button>
+            <button class="fs-btn-side fs-trash" onclick="removePhotoFullscreen()" title="Apagar Foto da Cifra"><i data-lucide="trash-2"></i> Apagar</button>
+        </div>
+        
+        <div class="fs-controls-bottom">
+            <div class="sidebar-box">
+                <label for="speed-slider">Velocidade de Rolagem: <span id="speed-value">2x</span></label>
+                <input type="range" id="speed-slider" min="0.25" max="10" step="0.25" value="2">
+                <button class="fs-btn-side fs-scroll" id="btn-autoscroll" onclick="toggleAutoScroll()">
+                    <i data-lucide="play" id="icon-scroll"></i> Iniciar Rolagem
+                </button>
+            </div>
+            
+            <div class="sidebar-box">
+                <label>Metrônomo Manual (BPM)</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="manual-bpm-input" class="bpm-input" placeholder="Ex: 80">
+                    <button class="fs-btn-side fs-metronome" id="btn-metronome-play" onclick="toggleManualMetronome()" style="flex-grow: 1;">
+                        <i data-lucide="play" style="width: 18px;"></i> Tocar
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-box" id="yt-sidebar-player">
+                <div class="yt-header"><i data-lucide="youtube" style="color: var(--error);"></i> Ouvir Música</div>
+                <iframe id="fs-yt-iframe" width="100%" height="160" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="display: none;"></iframe>
+                <div id="yt-empty-msg" class="yt-empty-msg">Nenhum vídeo do YouTube associado a esta música.</div>
+            </div>
+        </div>
+    </div>
     
-    <button class="fs-btn fs-scroll" id="btn-autoscroll" onclick="toggleAutoScroll()" title="Iniciar Rolagem Automática">
-        <i data-lucide="play" id="icon-scroll"></i>
-    </button>
-    
-    <img id="fullscreen-img" src="" alt="Cifra">
+    <div class="fs-image-area" id="fs-image-container">
+        <img id="fullscreen-img" src="" alt="Cifra">
+    </div>
 </div>
 
 <div id="reminder-popup" class="reminder-popup">
     <i data-lucide="bell-ring" style="color: var(--accent); width: 24px; height: 24px;"></i>
     <div class="reminder-content">
         <span class="reminder-title" id="reminder-days">Calculando...</span>
-        <span class="reminder-desc">Missa (02/04/2026)</span>
+        <span class="reminder-desc">Missa de Lava Pés (02/04/2026)</span>
     </div>
     <button class="reminder-close" onclick="closeReminder()"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
 </div>
@@ -289,18 +932,15 @@
                 <h3 id="cal-month-year"></h3>
                 <button onclick="changeMonth(1)"><i data-lucide="chevron-right" style="width: 20px;"></i></button>
             </div>
-            
             <div class="cal-weekdays">
                 <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
             </div>
             <div class="cal-days" id="cal-days"></div>
-            
             <div class="cal-legend">
                 <span class="legend-item"><span class="dot today-dot"></span> Hoje</span>
                 <span class="legend-item"><span class="dot ensaio-dot"></span> Ensaio</span>
                 <span class="legend-item"><span class="dot missa-dot"></span> Quinta-Feira Santa</span>
             </div>
-            
             <div id="events-container"></div>
         </div>
     </div>
@@ -317,7 +957,7 @@
     const escalaPadrao = [
         { momento: "Entrada", nome: "Nós Nos Gloriamos na Cruz", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=xgBKXAwFOiw", cifraLink: "", foto: null },
         { momento: "Ato Penitencial", nome: "Confesso a Deus", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=WZzaao5oPEA", cifraLink: "", foto: null },
-        { momento: "Ato Penitencial (2)", nome: "Senhor que viestes salvar", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=Tdm8MHfEzTE", cifraLink: "", foto: null },
+        { momento: "Ato Penitencial (2)", nome: "Kyrie Eleison", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=Tdm8MHfEzTE", cifraLink: "", foto: null },
         { momento: "Glória", nome: "Glória a Deus nas alturas", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=PuxYzdksJzI", cifraLink: "", foto: null },
         { momento: "Aclamação", nome: "Quero Ouvir Tua Palavra", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=38uj83KY9Nc", cifraLink: "", foto: null },
         { momento: "Lava Pés", nome: "Jesus erguendo-se da ceia", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=JbEJ1Zwh5XI", cifraLink: "", foto: null },
@@ -332,46 +972,44 @@
         { momento: "A Ele a Glória", nome: "A Ele a Glória", tom: "", bpm: "", anotacoes: "", yt: "https://www.youtube.com/watch?v=PRwul_3TMlY", cifraLink: "", foto: null }
     ];
 
-    let escala = JSON.parse(localStorage.getItem('meuRepertorio_v5')) || escalaPadrao;
+    let escala = JSON.parse(localStorage.getItem('meuRepertorio_v7')) || escalaPadrao;
     let indexAtual = -1; 
     let tempPhotoBase64 = null; 
     let photoContext = 'edit'; 
     let sortableInst = null; 
 
-    // Variáveis de Auto-Scroll
-    let scrollInterval = null;
+    // Variáveis do Auto-Scroll
     let isScrolling = false;
-
-    // Próximos Eventos (Calendário)
-    const proximosEventos = [
-        { id: '2026-03-22', type: 'ensaio', dataStr: '22 de Março', titulo: 'Ensaio Geral', hora: '09h30', local: 'Comunidade São José', url: 'https://www.google.com/maps/place/Posto+Petrobras/@-23.2113145,-46.8443653,3a,75y,156.33h,88.66t/data=!3m7!1e1!3m5!1sh76jolZkxLZ9GFXyiEckGA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3433673004713285%26panoid%3Dh76jolZkxLZ9GFXyiEckGA%26yaw%3D156.32537419791936!7i16384!8i8192!4m7!3m6!1s0x94cf20bcb874f2b3:0xa9e773eb960663a5!8m2!3d-23.2109729!4d-46.844975!10e5!16s%2Fg%2F1tg51knf?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D' },
-        { id: '2026-04-02', type: 'missa', dataStr: '02 de Abril', titulo: 'Missa de Lava Pés', hora: '19h00', local: 'Ginásio de Esportes Ayrton Senna', url: 'https://www.google.com/maps/place/Gin%C3%A1sio+de+Esportes+Ayrton+Senna+-+R.+Arist%C3%ADdes+Nivoloni,+240+-+Jardim+Maria+de+Fatima,+V%C3%A1rzea+Paulista+-+SP,+13220-450/@-23.2131688,-46.8626107,15z/data=!3m1!4b1!4m6!3m5!1s0x94cf20b899b3d91f:0x54672f98e04bd447!8m2!3d-23.2131896!4d-46.8441566!16s%2Fg%2F11b5qrvt4x?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D' }
-    ];
+    let scrollAnimation;
+    let scrollAccumulator = 0; 
+    
+    // Variáveis do Metrônomo
+    let audioCtx = null;
+    let metronomeTimer = null;
+    let isBpmPlaying = false;
 
     function salvarDadosLocal() {
-        try {
-            localStorage.setItem('meuRepertorio_v5', JSON.stringify(escala));
-        } catch (e) {
-            alert("A memória do telemóvel está cheia! Tente apagar algumas fotos de cifras antigas.");
+        try { 
+            localStorage.setItem('meuRepertorio_v7', JSON.stringify(escala)); 
+        } catch (e) { 
+            alert("A memória do telemóvel está cheia! Tente apagar algumas fotos de cifras antigas."); 
         }
     }
 
-    // --- MODO MISSA ---
     let isModoMissa = false;
     function toggleModoMissa() {
         isModoMissa = !isModoMissa;
         const icon = document.getElementById('icon-missa');
-        if (isModoMissa) {
-            document.body.classList.add('modo-missa');
-            icon.setAttribute('data-lucide', 'eye');
-        } else {
-            document.body.classList.remove('modo-missa');
-            icon.setAttribute('data-lucide', 'eye-off');
+        if (isModoMissa) { 
+            document.body.classList.add('modo-missa'); 
+            icon.setAttribute('data-lucide', 'eye'); 
+        } else { 
+            document.body.classList.remove('modo-missa'); 
+            icon.setAttribute('data-lucide', 'eye-off'); 
         }
         lucide.createIcons();
     }
 
-    // --- PARTILHAR WHATSAPP ---
     function shareWhatsApp() {
         let text = "🎵 *Repertório - Quinta-feira Santa*\n_Missa de Lava Pés_\n\n";
         escala.forEach((m, index) => {
@@ -387,42 +1025,30 @@
         window.open(url, '_blank');
     }
 
-    // --- RENDERIZAR ESCALA ---
     function renderRepertorio() {
         let html = '<div class="card card-repertorio" id="lista-arrastavel">';
         escala.forEach((m, index) => {
-            
-            // Aqui mudamos para a miniatura se a foto existir
             const photoButton = m.foto 
-                ? `<button class="btn-photo-has" onclick="openFullscreen(${index})" title="Ver Cifra Anexada" style="padding: 4px;">
-                     <img src="${m.foto}" class="cifra-thumb" alt="Miniatura da Cifra">
-                   </button>`
+                ? `<button class="btn-photo-has" onclick="openFullscreen(${index})" title="Ver Cifra Anexada" style="padding: 4px;"><img src="${m.foto}" class="cifra-thumb" alt="Miniatura"></button>`
                 : `<button class="action-add-photo" onclick="openPhotoChoiceModal(${index})" title="Adicionar Cifra"><i data-lucide="camera"></i></button>`; 
 
             const urlCifra = m.cifraLink ? m.cifraLink : `https://www.cifraclub.com.br/?q=${encodeURIComponent(m.nome)}`;
             const badgeTom = (m.tom && m.tom.trim() !== "") ? `<span class="badge-info">${m.tom}</span>` : ``;
             const badgeBpm = (m.bpm && m.bpm.trim() !== "") ? `<span class="badge-bpm">${m.bpm} BPM</span>` : ``;
             
-            const divAnotacoes = (m.anotacoes && m.anotacoes.trim() !== "") 
-                ? `<div class="anotacoes-preview"><i data-lucide="sticky-note" style="width: 12px; height: 12px;"></i> ${m.anotacoes}</div>` 
-                : ``;
+            const divAnotacoes = (m.anotacoes && m.anotacoes.trim() !== "") ? `<div class="anotacoes-preview"><i data-lucide="sticky-note" style="width: 12px; height: 12px;"></i> ${m.anotacoes}</div>` : ``;
 
             html += `
             <div class="item-musica" data-id="${index}">
                 <i data-lucide="grip-vertical" class="drag-handle" title="Segure para arrastar"></i>
                 <div class="info-musica">
                     <span class="momento">${m.momento}</span>
-                    <div class="nome-container">
-                        <span class="nome-musica">${m.nome}</span>
-                        ${badgeTom} ${badgeBpm}
-                    </div>
+                    <div class="nome-container"><span class="nome-musica">${m.nome}</span>${badgeTom} ${badgeBpm}</div>
                     ${divAnotacoes}
                 </div>
                 <div class="actions">
                     ${photoButton}
-                    <button onclick="openLink('${urlCifra}')" title="Abrir no Cifra Club">
-                        <img src="https://www.google.com/s2/favicons?domain=cifraclub.com.br&sz=128" class="cifra-logo" alt="Cifra Club">
-                    </button>
+                    <button onclick="openLink('${urlCifra}')" title="Abrir no Cifra Club"><img src="https://www.google.com/s2/favicons?domain=cifraclub.com.br&sz=128" class="cifra-logo" alt="Cifra Club"></button>
                     <button class="btn-youtube" onclick="openLink('${m.yt}')" title="Ouvir no YouTube"><i data-lucide="youtube"></i></button>
                     <button class="action-edit" onclick="openEditModal(${index})" title="Editar Música"><i data-lucide="pencil" style="width:18px; height:18px;"></i></button>
                 </div>
@@ -430,12 +1056,7 @@
         });
         html += '</div>';
 
-        // Botão extra de adicionar no final da lista
-        html += `
-        <button id="btn-add-bottom" class="btn-primary" style="margin-top: 20px; font-size: 15px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);" onclick="adicionarMusica()">
-            <i data-lucide="plus" style="width: 20px; margin-right: 8px;"></i> Adicionar Nova Música
-        </button>`;
-
+        html += `<button id="btn-add-bottom" class="btn-primary" style="margin-top: 20px; font-size: 15px;" onclick="adicionarMusica()"><i data-lucide="plus" style="width: 20px; margin-right: 8px;"></i> Adicionar Nova Música</button>`;
         document.getElementById('escala-fixa-container').innerHTML = html;
         lucide.createIcons();
         initDragAndDrop(); 
@@ -444,49 +1065,44 @@
     function initDragAndDrop() {
         const listaArrastavel = document.getElementById('lista-arrastavel');
         if (sortableInst) sortableInst.destroy();
-        
         sortableInst = new Sortable(listaArrastavel, {
             handle: '.drag-handle',
             animation: 200,
             ghostClass: 'sortable-ghost',
-            onEnd: function (evt) {
-                const itemMovido = escala.splice(evt.oldIndex, 1)[0];
-                escala.splice(evt.newIndex, 0, itemMovido);
-                salvarDadosLocal();
+            onEnd: function (evt) { 
+                const itemMovido = escala.splice(evt.oldIndex, 1)[0]; 
+                escala.splice(evt.newIndex, 0, itemMovido); 
+                salvarDadosLocal(); 
                 renderRepertorio(); 
             }
         });
     }
 
-    // --- ADICIONAR / EXCLUIR MÚSICA ---
     function adicionarMusica() {
         escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", anotacoes: "", yt: "", cifraLink: "", foto: null });
-        salvarDadosLocal();
-        renderRepertorio();
+        salvarDadosLocal(); 
+        renderRepertorio(); 
         openEditModal(escala.length - 1);
-        
-        // Dá scroll suave até ao fundo para ver a nova música adicionada
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
     function excluirMusica() {
-        if (confirm("Tem a certeza absoluta de que pretende eliminar esta música da liturgia?")) {
-            escala.splice(indexAtual, 1);
-            salvarDadosLocal();
-            renderRepertorio();
+        if (confirm("Tem certeza absoluta de que deseja excluir esta música?")) {
+            escala.splice(indexAtual, 1); 
+            salvarDadosLocal(); 
+            renderRepertorio(); 
             closeModal('edit-modal');
         }
     }
 
-    function openPhotoChoiceModal(index) {
-        indexAtual = index;
-        document.getElementById('photo-choice-modal').style.display = 'flex';
+    function openPhotoChoiceModal(index) { 
+        indexAtual = index; 
+        document.getElementById('photo-choice-modal').style.display = 'flex'; 
     }
 
     function openEditModal(index) {
-        indexAtual = index;
+        indexAtual = index; 
         const musica = escala[index];
-        
         document.getElementById('edit-momento').value = musica.momento || "";
         document.getElementById('edit-nome').value = musica.nome || "";
         document.getElementById('edit-tom').value = musica.tom || ""; 
@@ -497,28 +1113,28 @@
         
         tempPhotoBase64 = musica.foto; 
         updateModalPhotoUI(musica.foto);
-
-        document.getElementById('edit-modal').style.display = 'flex';
+        
+        document.getElementById('edit-modal').style.display = 'flex'; 
         lucide.createIcons(); 
     }
 
     function updateModalPhotoUI(photoData) {
-        const previewImg = document.getElementById('edit-photo-preview');
-        const statusText = document.getElementById('edit-photo-status');
+        const previewImg = document.getElementById('edit-photo-preview'); 
+        const statusText = document.getElementById('edit-photo-status'); 
         const btnRemove = document.getElementById('edit-remove-photo');
         
-        if (photoData) {
-            previewImg.src = photoData;
-            previewImg.style.display = 'block';
-            statusText.innerText = "✓ Cifra em imagem anexada";
-            statusText.className = "photo-status has-photo";
-            btnRemove.style.display = 'block';
-        } else {
-            previewImg.src = "";
-            previewImg.style.display = 'none';
-            statusText.innerText = "Nenhuma foto anexada";
-            statusText.className = "photo-status";
-            btnRemove.style.display = 'none';
+        if (photoData) { 
+            previewImg.src = photoData; 
+            previewImg.style.display = 'block'; 
+            statusText.innerText = "✓ Cifra anexada"; 
+            statusText.className = "photo-status has-photo"; 
+            btnRemove.style.display = 'block'; 
+        } else { 
+            previewImg.src = ""; 
+            previewImg.style.display = 'none'; 
+            statusText.innerText = "Nenhuma foto anexada"; 
+            statusText.className = "photo-status"; 
+            btnRemove.style.display = 'none'; 
         }
     }
 
@@ -532,206 +1148,360 @@
             escala[indexAtual].yt = document.getElementById('edit-yt').value;
             escala[indexAtual].cifraLink = document.getElementById('edit-cifra').value;
             escala[indexAtual].foto = tempPhotoBase64; 
-            salvarDadosLocal();
-            renderRepertorio();
+            
+            salvarDadosLocal(); 
+            renderRepertorio(); 
             closeModal('edit-modal');
         }
     }
 
-    function triggerCamera(contexto) { photoContext = contexto; document.getElementById('file-upload-camera').click(); }
-    function triggerGallery(contexto) { photoContext = contexto; document.getElementById('file-upload-gallery').click(); }
+    function triggerCamera(contexto) { 
+        photoContext = contexto; 
+        document.getElementById('file-upload-camera').click(); 
+    }
+
+    function triggerGallery(contexto) { 
+        photoContext = contexto; 
+        document.getElementById('file-upload-gallery').click(); 
+    }
 
     function handleFileUpload(event) {
-        const file = event.target.files[0];
+        const file = event.target.files[0]; 
         if (!file) return;
-
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             compressImage(e.target.result, 1200, function(compressedBase64) {
-                if (photoContext === 'edit') {
-                    tempPhotoBase64 = compressedBase64;
-                    updateModalPhotoUI(compressedBase64);
-                } else if (photoContext === 'direct') {
-                    escala[indexAtual].foto = compressedBase64;
-                    salvarDadosLocal();
-                    renderRepertorio();
-                    closeModal('photo-choice-modal');
+                if (photoContext === 'edit') { 
+                    tempPhotoBase64 = compressedBase64; 
+                    updateModalPhotoUI(compressedBase64); 
+                } else if (photoContext === 'direct') { 
+                    escala[indexAtual].foto = compressedBase64; 
+                    salvarDadosLocal(); 
+                    renderRepertorio(); 
+                    closeModal('photo-choice-modal'); 
                 }
             });
         };
-        reader.readAsDataURL(file);
-        document.getElementById('file-upload-camera').value = '';
+        reader.readAsDataURL(file); 
+        document.getElementById('file-upload-camera').value = ''; 
         document.getElementById('file-upload-gallery').value = '';
     }
 
-    function removePhotoModal() {
-        if (confirm("Tem a certeza de que pretende remover a foto desta cifra?")) {
-            tempPhotoBase64 = null;
-            updateModalPhotoUI(null);
+    function removePhotoModal() { 
+        if (confirm("Tem certeza de que deseja remover a foto?")) { 
+            tempPhotoBase64 = null; 
+            updateModalPhotoUI(null); 
+        } 
+    }
+
+    function getYouTubeEmbedUrl(url) {
+        if (!url) return null;
+        let videoId = "";
+        try {
+            if (url.includes('youtube.com/watch?v=')) { 
+                videoId = url.split('v=')[1].split('&')[0]; 
+            } else if (url.includes('youtu.be/')) { 
+                videoId = url.split('youtu.be/')[1].split('?')[0]; 
+            }
+            return videoId ? `https://www.youtube.com/embed/${videoId}?playsinline=1` : null;
+        } catch (e) { 
+            return null; 
         }
     }
 
-    // --- TELA CHEIA E SCROLL AUTOMÁTICO ---
+    // --- TELA CHEIA (SIDEBAR FIXA) ---
     function openFullscreen(index) {
         indexAtual = index;
         const musica = escala[index];
+        
         if (musica.foto) {
             document.getElementById('fullscreen-img').src = musica.foto;
-            const fsContainer = document.getElementById('fullscreen-photo');
-            fsContainer.style.display = 'block'; 
-            fsContainer.scrollTop = 0; 
+            document.getElementById('fullscreen-photo').style.display = 'flex'; 
+            document.getElementById('fs-image-container').scrollTop = 0; 
+            
+            scrollAccumulator = 0; 
             pararAutoScroll(); 
+            pararMetronomo();
+
+            // Preenche o input do BPM com o valor salvo na música
+            document.getElementById('manual-bpm-input').value = musica.bpm || "";
+
+            // Configura o YouTube Player Fixo
+            const ytEmbedUrl = getYouTubeEmbedUrl(musica.yt);
+            const ytIframe = document.getElementById('fs-yt-iframe');
+            const ytEmpty = document.getElementById('yt-empty-msg');
+            
+            if (ytEmbedUrl) {
+                ytIframe.src = ytEmbedUrl;
+                ytIframe.style.display = 'block';
+                ytEmpty.style.display = 'none';
+            } else {
+                ytIframe.src = '';
+                ytIframe.style.display = 'none';
+                ytEmpty.style.display = 'block';
+            }
         }
     }
 
     function closeFullscreen() {
         document.getElementById('fullscreen-photo').style.display = 'none';
         document.getElementById('fullscreen-img').src = "";
-        pararAutoScroll();
+        document.getElementById('fs-yt-iframe').src = ""; // Para o vídeo do YT
+        pararAutoScroll(); 
+        pararMetronomo();
     }
 
     function removePhotoFullscreen() {
-        if (indexAtual > -1 && confirm("Tem a certeza de que pretende apagar a foto desta cifra?")) {
-            escala[indexAtual].foto = null;
-            salvarDadosLocal();
-            renderRepertorio();
+        if (indexAtual > -1 && confirm("Tem certeza de que deseja apagar a foto desta cifra?")) {
+            escala[indexAtual].foto = null; 
+            salvarDadosLocal(); 
+            renderRepertorio(); 
             closeFullscreen();
         }
     }
 
+    // --- LÓGICA DO METRÔNOMO MANUAL ---
+    function playBeep() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        osc.connect(gainNode); 
+        gainNode.connect(audioCtx.destination);
+        
+        osc.frequency.value = 800; // Frequência do bipe
+        osc.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        
+        osc.start(audioCtx.currentTime); 
+        osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    function toggleManualMetronome() {
+        const input = document.getElementById('manual-bpm-input');
+        const bpm = parseInt(input.value);
+        const btn = document.getElementById('btn-metronome-play');
+
+        if (isBpmPlaying) {
+            pararMetronomo();
+        } else {
+            if (!bpm || bpm <= 0) {
+                alert("Por favor, digite um valor de BPM válido na caixa.");
+                input.focus();
+                return;
+            }
+            
+            const intervalMs = 60000 / bpm; 
+            playBeep(); // Toca o primeiro bipe imediatamente
+            
+            metronomeTimer = setInterval(playBeep, intervalMs);
+            isBpmPlaying = true;
+            
+            btn.classList.add('playing');
+            btn.innerHTML = `<i data-lucide="square" style="width: 18px;"></i> Parar`;
+            lucide.createIcons();
+        }
+    }
+
+    function pararMetronomo() {
+        clearInterval(metronomeTimer); 
+        isBpmPlaying = false;
+        
+        const btn = document.getElementById('btn-metronome-play');
+        if (btn) {
+            btn.classList.remove('playing');
+            btn.innerHTML = `<i data-lucide="play" style="width: 18px;"></i> Tocar`;
+            lucide.createIcons();
+        }
+    }
+
+    // --- AUTO SCROLL ---
+    function scrollStep() {
+        if (!isScrolling) return;
+        
+        const container = document.getElementById('fs-image-container');
+        const slider = document.getElementById('speed-slider');
+        let velocidade = parseFloat(slider.value) || 2;
+        
+        document.getElementById('speed-value').innerText = velocidade + 'x';
+        scrollAccumulator += (velocidade * 0.5);
+
+        if (scrollAccumulator >= 1) {
+            let pixelsToScroll = Math.floor(scrollAccumulator);
+            container.scrollTop += pixelsToScroll; 
+            scrollAccumulator -= pixelsToScroll; 
+        }
+
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 2) { 
+            pararAutoScroll(); 
+        } else { 
+            scrollAnimation = requestAnimationFrame(scrollStep); 
+        }
+    }
+
+    document.addEventListener('input', function(e) {
+        if (e.target.id === 'speed-slider') { 
+            document.getElementById('speed-value').innerText = e.target.value + 'x'; 
+        }
+    });
+
     function toggleAutoScroll() {
         const btn = document.getElementById('btn-autoscroll');
-        const icon = document.getElementById('icon-scroll');
-        
-        if (isScrolling) {
-            pararAutoScroll();
-        } else {
-            isScrolling = true;
-            btn.classList.add('playing');
-            icon.setAttribute('data-lucide', 'pause');
-            lucide.createIcons();
-            
-            const fsContainer = document.getElementById('fullscreen-photo');
-            // Desce 1 pixel a cada 40ms (Pode ajustar a velocidade alterando os 40)
-            scrollInterval = setInterval(() => {
-                fsContainer.scrollTop += 1;
-                // Se chegar ao final, pára automaticamente
-                if (fsContainer.scrollTop + fsContainer.clientHeight >= fsContainer.scrollHeight - 1) {
-                    pararAutoScroll();
-                }
-            }, 40);
+        if (isScrolling) { 
+            pararAutoScroll(); 
+        } else { 
+            isScrolling = true; 
+            btn.classList.add('playing'); 
+            btn.innerHTML = `<i data-lucide="pause" style="width: 20px;"></i> Pausar`; 
+            lucide.createIcons(); 
+            scrollAnimation = requestAnimationFrame(scrollStep); 
         }
     }
 
     function pararAutoScroll() {
-        isScrolling = false;
-        clearInterval(scrollInterval);
+        isScrolling = false; 
+        cancelAnimationFrame(scrollAnimation);
+        
         const btn = document.getElementById('btn-autoscroll');
-        const icon = document.getElementById('icon-scroll');
-        if(btn) btn.classList.remove('playing');
-        if(icon) {
-            icon.setAttribute('data-lucide', 'play');
-            lucide.createIcons();
+        if(btn) { 
+            btn.classList.remove('playing'); 
+            btn.innerHTML = `<i data-lucide="play" style="width: 20px;"></i> Iniciar Rolagem`; 
+            lucide.createIcons(); 
         }
     }
 
     function compressImage(base64Str, maxWidth, callback) {
-        let img = new Image();
+        let img = new Image(); 
         img.src = base64Str;
         img.onload = () => {
-            let canvas = document.createElement('canvas');
-            let width = img.width;
+            let canvas = document.createElement('canvas'); 
+            let width = img.width; 
             let height = img.height;
-            if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-            canvas.width = width; canvas.height = height;
-            let ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+            
+            if (width > maxWidth) { 
+                height *= maxWidth / width; 
+                width = maxWidth; 
+            }
+            
+            canvas.width = width; 
+            canvas.height = height; 
+            let ctx = canvas.getContext('2d'); 
+            ctx.drawImage(img, 0, 0, width, height);
+            
             callback(canvas.toDataURL('image/jpeg', 0.8)); 
         };
     }
 
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function openLink(url) {
-        if (!url) return;
-        if (url.startsWith('http://') || url.startsWith('https://')) { window.open(url, '_blank'); } 
-        else { alert("O link não é válido. Certifique-se de incluir o https://"); }
+    function closeModal(id) { 
+        document.getElementById(id).style.display = 'none'; 
+    }
+    
+    function openLink(url) { 
+        if (!url) return; 
+        if (url.startsWith('http://') || url.startsWith('https://')) { 
+            window.open(url, '_blank'); 
+        } else { 
+            alert("O link não é válido."); 
+        } 
     }
 
     function showPage(p) {
         document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
-        document.getElementById(p).classList.add('active');
+        
+        document.getElementById(p).classList.add('active'); 
         document.getElementById('n-'+p).classList.add('active');
         
-        const fab = document.getElementById('fab-add');
+        const fab = document.getElementById('fab-add'); 
         if(fab) fab.style.display = (p === 'repertorio' && !isModoMissa) ? 'flex' : 'none';
-
+        
         const reminder = document.getElementById('reminder-popup');
-        if (reminder && reminder.style.display !== 'none') {
-            reminder.style.opacity = p === 'repertorio' ? '1' : '0';
-            reminder.style.pointerEvents = p === 'repertorio' ? 'auto' : 'none';
+        if (reminder && reminder.style.display !== 'none') { 
+            reminder.style.opacity = p === 'repertorio' ? '1' : '0'; 
+            reminder.style.pointerEvents = p === 'repertorio' ? 'auto' : 'none'; 
         }
     }
 
     function toggleTheme() {
-        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('dark-mode'); 
         const isDark = document.body.classList.contains('dark-mode');
-        document.getElementById('t-icon').setAttribute('data-lucide', isDark ? 'sun' : 'moon');
+        document.getElementById('t-icon').setAttribute('data-lucide', isDark ? 'sun' : 'moon'); 
         lucide.createIcons();
     }
 
-    let currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
+    // --- CALENDÁRIO E EVENTOS ---
+    let currentDate = new Date(); 
+    let currentMonth = currentDate.getMonth(); 
     let currentYear = currentDate.getFullYear();
     const eventDate = new Date(2026, 3, 2); 
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     function setupReminder() {
-        const today = new Date(); today.setHours(0,0,0,0);
-        const eventZero = new Date(eventDate); eventZero.setHours(0,0,0,0);
-        const diffDays = Math.ceil((eventZero - today) / (1000 * 60 * 60 * 24));
+        const today = new Date(); 
+        today.setHours(0,0,0,0); 
+        const eventZero = new Date(eventDate); 
+        eventZero.setHours(0,0,0,0);
+        
+        const diffDays = Math.ceil((eventZero - today) / (1000 * 60 * 60 * 24)); 
         const reminderText = document.getElementById('reminder-days');
-        if (diffDays > 1) { reminderText.innerText = `Faltam ${diffDays} dias!`; } 
-        else if (diffDays === 1) { reminderText.innerText = "É amanhã!"; } 
-        else if (diffDays === 0) { reminderText.innerText = "É HOJE!"; } 
-        else { document.getElementById('reminder-popup').style.display = 'none'; }
+        
+        if (diffDays > 1) { 
+            reminderText.innerText = `Faltam ${diffDays} dias!`; 
+        } else if (diffDays === 1) { 
+            reminderText.innerText = "É amanhã!"; 
+        } else if (diffDays === 0) { 
+            reminderText.innerText = "É HOJE!"; 
+        } else { 
+            document.getElementById('reminder-popup').style.display = 'none'; 
+        }
     }
 
-    function closeReminder() {
-        const popup = document.getElementById('reminder-popup');
-        popup.style.opacity = '0';
-        setTimeout(() => popup.style.display = 'none', 300);
+    function closeReminder() { 
+        const popup = document.getElementById('reminder-popup'); 
+        popup.style.opacity = '0'; 
+        setTimeout(() => popup.style.display = 'none', 300); 
     }
 
-    // --- RENDERIZAR CALENDÁRIO E EVENTOS ---
     function renderCalendar() {
         document.getElementById("cal-month-year").innerText = `${monthNames[currentMonth]} ${currentYear}`;
-        const daysContainer = document.getElementById("cal-days");
+        const daysContainer = document.getElementById("cal-days"); 
         daysContainer.innerHTML = "";
-        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay(); 
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         
-        for (let i = 0; i < firstDay; i++) { daysContainer.innerHTML += `<div class="cal-day empty"></div>`; }
+        for (let i = 0; i < firstDay; i++) { 
+            daysContainer.innerHTML += `<div class="cal-day empty"></div>`; 
+        }
         
         const today = new Date();
+        const proximosEventos = [
+            { id: '2026-03-22', type: 'ensaio', dataStr: '22 de Março', titulo: 'Ensaio Geral', hora: '09h30', local: 'Comunidade São José', url: 'https://www.google.com/maps/place/Posto+Petrobras/@-23.2113145,-46.8443653,3a,75y,156.33h,88.66t/data=!3m7!1e1!3m5!1sh76jolZkxLZ9GFXyiEckGA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D1.3433673004713285%26panoid%3Dh76jolZkxLZ9GFXyiEckGA%26yaw%3D156.32537419791936!7i16384!8i8192!4m7!3m6!1s0x94cf20bcb874f2b3:0xa9e773eb960663a5!8m2!3d-23.2109729!4d-46.844975!10e5!16s%2Fg%2F1tg51knf?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D' },
+            { id: '2026-04-02', type: 'missa', dataStr: '02 de Abril', titulo: 'Missa de Lava Pés', hora: '19h00', local: 'Ginásio de Esportes Ayrton Senna', url: 'https://www.google.com/maps/place/Gin%C3%A1sio+de+Esportes+Ayrton+Senna+-+R.+Arist%C3%ADdes+Nivoloni,+240+-+Jardim+Maria+de+Fatima,+V%C3%A1rzea+Paulista+-+SP,+13220-450/@-23.2131688,-46.8626107,15z/data=!3m1!4b1!4m6!3m5!1s0x94cf20b899b3d91f:0x54672f98e04bd447!8m2!3d-23.2131896!4d-46.8441566!16s%2Fg%2F11b5qrvt4x?entry=ttu&g_ep=EgoyMDI2MDMwNS4wIKXMDSoASAFQAw%3D%3D' }
+        ];
+        
         for (let i = 1; i <= daysInMonth; i++) {
-            let classes = "cal-day";
+            let classes = "cal-day"; 
+            if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                classes += " today";
+            }
             
-            // É hoje?
-            if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) classes += " today";
-            
-            // Tem evento neste dia?
             let dStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-            let ev = proximosEventos.find(e => e.id === dStr);
+            let ev = proximosEventos.find(e => e.id === dStr); 
+            
             if (ev) classes += " " + ev.type;
             
             daysContainer.innerHTML += `<div class="${classes}">${i}</div>`;
         }
-        
-        renderEvents();
+        renderEvents(proximosEventos);
     }
 
-    function renderEvents() {
+    function renderEvents(proximosEventos) {
         let eventsHtml = `<h3 style="font-size: 15px; font-weight: 800; margin: 25px 0 15px; border-top: 1px solid var(--border); padding-top: 20px;">Próximos Eventos</h3>`;
         eventsHtml += `<div style="display: flex; flex-direction: column; gap: 12px;">`;
         
@@ -753,23 +1523,28 @@
             </div>
         `).join('');
         
-        eventsHtml += `</div>`;
-        
-        document.getElementById('events-container').innerHTML = eventsHtml;
+        eventsHtml += `</div>`; 
+        document.getElementById('events-container').innerHTML = eventsHtml; 
         lucide.createIcons();
     }
 
-    function changeMonth(dir) {
-        currentMonth += dir;
-        if (currentMonth > 11) { currentMonth = 0; currentYear++; } 
-        else if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-        renderCalendar();
+    function changeMonth(dir) { 
+        currentMonth += dir; 
+        if (currentMonth > 11) { 
+            currentMonth = 0; 
+            currentYear++; 
+        } else if (currentMonth < 0) { 
+            currentMonth = 11; 
+            currentYear--; 
+        } 
+        renderCalendar(); 
     }
 
-    renderRepertorio();
-    renderCalendar();
+    // Inicialização
+    renderRepertorio(); 
+    renderCalendar(); 
     setupReminder();
-</script>
 
+</script>
 </body>
 </html>
