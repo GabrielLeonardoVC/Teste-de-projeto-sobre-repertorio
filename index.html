@@ -1030,21 +1030,6 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-bottom: 12px; margin-top: 12px;">
-                    <div style="flex: 1;">
-                        <label style="font-size: 12px; font-weight: 700; margin-bottom: 5px; display: block;">Status do Ensaio</label>
-                        <select id="edit-status" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
-                            <option value="pronta">🟢 Pronta (Verde)</option>
-                            <option value="revisar">🟡 Revisar (Amarelo)</option>
-                            <option value="nova">🔴 Nova (Vermelho)</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="font-size: 12px; font-weight: 700; margin-bottom: 5px; display: block;">Vozes / Cantores</label>
-                        <input type="text" id="edit-vozes" placeholder="Ex: Todos, Mulheres..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
-                    </div>
-                </div>
-        
         <div class="form-group">
             <label>Nome da Música</label>
             <input type="text" id="edit-nome" placeholder="Nome da música">
@@ -1403,7 +1388,8 @@
     }
 
     function adicionarMusica() {
-escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", anotacoes: "", yt: "", cifraLink: "", foto: null, status: "pronta", vozes: "" });        salvarDadosLocal(); 
+        escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", anotacoes: "", yt: "", cifraLink: "", foto: null });
+        salvarDadosLocal(); 
         renderRepertorio(); 
         openEditModal(escala.length - 1);
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -1433,8 +1419,6 @@ escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", a
         document.getElementById('edit-anotacoes').value = musica.anotacoes || ""; 
         document.getElementById('edit-yt').value = musica.yt || "";
         document.getElementById('edit-cifra').value = musica.cifraLink || "";
-        document.getElementById('edit-status').value = musica.status || "pronta"; 
-        document.getElementById('edit-vozes').value = musica.vozes || "";
         
         tempPhotoBase64 = musica.foto; 
         updateModalPhotoUI(musica.foto);
