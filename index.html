@@ -893,6 +893,56 @@
             .titulos h1, .titulos .subtitle { text-align: center; }
             .momento { color: #000 !important; }
         }
+
+        /* --- NOVOS ESTILOS: CANETA VIRTUAL E FERRAMENTAS --- */
+        .canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            cursor: crosshair;
+            touch-action: none; /* Evita que a tela role enquanto desenha */
+        }
+        
+        #canvas-wrapper {
+            position: relative;
+            display: inline-block;
+            max-width: 100%;
+        }
+
+        .draw-tools {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .btn-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            cursor: pointer;
+        }
+        .btn-color.active {
+            border: 3px solid var(--text);
+            transform: scale(1.1);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tool-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -986,6 +1036,7 @@
             <button class="fs-btn-side fs-close" onclick="closeFullscreen()" title="Fechar Cifra"><i data-lucide="x"></i></button>
             <button class="fs-btn-side fs-nav-btn" onclick="navegarCifra(1)" title="Próxima Cifra"><i data-lucide="chevron-right"></i></button>
             <button class="fs-btn-side fs-trash" style="flex: 0.5; padding: 12px 0;" onclick="removePhotoFullscreen()" title="Apagar Foto da Cifra"><i data-lucide="trash-2"></i></button>
+            <button class="fs-btn-side fs-nav-btn" id="btn-draw-toggle" onclick="toggleDrawingMode()" title="Anotar na Cifra"><i data-lucide="pen-tool"></i></button>
         </div>
         
         <div class="fs-controls-bottom">
@@ -1007,6 +1058,20 @@
                 </div>
             </div>
 
+            <div class="sidebar-box" id="draw-controls" style="display: none;">
+                <label>Caneta (Rabiscar Cifra)</label>
+                <div class="draw-tools">
+                    <button class="btn-color active" style="background: red;" onclick="changeColor('red', this)"></button>
+                    <button class="btn-color" style="background: blue;" onclick="changeColor('blue', this)"></button>
+                    <button class="btn-color" style="background: black;" onclick="changeColor('black', this)"></button>
+                    <button class="btn-color" style="background: yellow;" onclick="changeColor('yellow', this)"></button>
+                </div>
+                <div class="draw-tools" style="margin-top: 10px;">
+                    <button class="btn-secondary" style="flex: 1; padding: 8px; font-size: 12px;" onclick="clearCanvas()">Limpar</button>
+                    <button class="btn-primary" style="flex: 1; padding: 8px; font-size: 12px;" onclick="saveCanvasToImage()">Salvar</button>
+                </div>
+            </div>
+
             <div class="sidebar-box" id="yt-sidebar-player">
                 <div class="yt-header"><i data-lucide="youtube" style="color: var(--error);"></i> Ouvir Música</div>
                 <iframe id="fs-yt-iframe" width="100%" height="160" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="display: none;"></iframe>
@@ -1016,7 +1081,10 @@
     </div>
     
     <div class="fs-image-area" id="fs-image-container">
-        <img id="fullscreen-img" src="" alt="Cifra">
+        <div id="canvas-wrapper">
+            <img id="fullscreen-img" src="" alt="Cifra">
+            <canvas id="draw-canvas" class="canvas-overlay" style="display: none;"></canvas>
+        </div>
     </div>
 </div>
 
@@ -1027,6 +1095,36 @@
         <span class="reminder-desc">Missa de Lava Pés (02/04/2026)</span>
     </div>
     <button class="reminder-close" onclick="closeReminder()"><i data-lucide="x" style="width: 18px; height: 18px;"></i></button>
+</div>
+
+<div id="ferramentas-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 400px;">
+        <h2>🛠️ Ferramentas Rápidas</h2>
+        
+        <div class="tools-grid">
+            <div class="tool-card">
+                <i data-lucide="search" style="color: var(--accent); margin-bottom: 10px; width: 24px; height: 24px;"></i>
+                <h4 style="margin-bottom: 10px; font-size: 13px;">Busca de Emergência</h4>
+                <input type="text" id="busca-emergencia" placeholder="Nome da música..." style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-size: 12px;">
+                <button class="btn-primary" style="width: 100%; padding: 8px; font-size: 11px; margin-bottom: 5px;" onclick="fazerBuscaEmergencia('cifra')">CifraClub</button>
+                <button class="btn-secondary" style="width: 100%; padding: 8px; font-size: 11px;" onclick="fazerBuscaEmergencia('youtube')">YouTube</button>
+            </div>
+
+            <div class="tool-card">
+                <i data-lucide="arrow-up-down" style="color: var(--success); margin-bottom: 10px; width: 24px; height: 24px;"></i>
+                <h4 style="margin-bottom: 10px; font-size: 13px;">Mudar Tom</h4>
+                <select id="trans-tom-atual" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-size: 12px;">
+                    <option value="">Tom Atual...</option>
+                    <option value="C">C</option><option value="C#">C#</option><option value="D">D</option><option value="D#">D#</option><option value="E">E</option><option value="F">F</option><option value="F#">F#</option><option value="G">G</option><option value="G#">G#</option><option value="A">A</option><option value="A#">A#</option><option value="B">B</option>
+                </select>
+                <input type="number" id="trans-semitons" placeholder="+/- Semitons" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px; font-size: 12px;">
+                <button class="btn-primary" style="width: 100%; padding: 8px; font-size: 11px;" onclick="calcularNovoTom()">Calcular</button>
+                <div id="resultado-tom" style="margin-top: 10px; font-weight: 800; color: var(--success); font-size: 14px;"></div>
+            </div>
+        </div>
+        
+        <button class="btn-secondary" style="width: 100%; margin-top: 15px;" onclick="closeModal('ferramentas-modal')">Fechar</button>
+    </div>
 </div>
 
 <div class="container">
@@ -1041,6 +1139,7 @@
                 <button class="top-action-btn" onclick="window.print()" title="Imprimir / PDF"><i data-lucide="printer"></i></button>
                 <button class="top-action-btn" id="btn-missa" onclick="toggleModoMissa()" title="Modo Missa (Oculta edições)"><i data-lucide="eye-off" id="icon-missa"></i></button>
                 <button class="top-action-btn" onclick="shareWhatsApp()" title="Partilhar no WhatsApp"><i data-lucide="share-2" style="color: var(--success);"></i></button>
+                <button class="top-action-btn" onclick="openFerramentas()" title="Ferramentas e Emergência"><i data-lucide="wrench" style="color: var(--primary);"></i></button>
                 <button class="top-action-btn" onclick="toggleTheme()" title="Trocar Tema"><i data-lucide="moon" id="t-icon"></i></button>
             </div>
         </div>
@@ -1807,6 +1906,183 @@
     renderRepertorio(); 
     renderCalendar(); 
     setupReminder();
+
+    // ==========================================
+    // LÓGICA: FERRAMENTAS & TRANSPOSITOR
+    // ==========================================
+    function openFerramentas() {
+        document.getElementById('ferramentas-modal').style.display = 'flex';
+        document.getElementById('resultado-tom').innerText = "";
+        lucide.createIcons();
+    }
+
+    function fazerBuscaEmergencia(tipo) {
+        const query = document.getElementById('busca-emergencia').value;
+        if (!query) { alert("Digite o nome de uma música!"); return; }
+        
+        let url = "";
+        if (tipo === 'cifra') url = `https://www.cifraclub.com.br/?q=${encodeURIComponent(query)}`;
+        if (tipo === 'youtube') url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+        
+        window.open(url, '_blank');
+    }
+
+    function calcularNovoTom() {
+        const notasMapeadas = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const tomAtual = document.getElementById('trans-tom-atual').value;
+        const semitons = parseInt(document.getElementById('trans-semitons').value);
+
+        if (!tomAtual || isNaN(semitons)) {
+            document.getElementById('resultado-tom').innerText = "Preencha os dados!";
+            document.getElementById('resultado-tom').style.color = "var(--error)";
+            return;
+        }
+
+        let indexAtualTom = notasMapeadas.indexOf(tomAtual);
+        if (indexAtualTom === -1) return;
+
+        // Calcula o novo índice rodando o array (usando módulo)
+        let novoIndex = (indexAtualTom + semitons) % 12;
+        if (novoIndex < 0) novoIndex += 12; // Corrige se o número for negativo
+
+        const novoTom = notasMapeadas[novoIndex];
+        document.getElementById('resultado-tom').innerText = `O novo tom é: ${novoTom}`;
+        document.getElementById('resultado-tom').style.color = "var(--success)";
+    }
+
+    // ==========================================
+    // LÓGICA: CANETA VIRTUAL (DESENHO NO CANVAS)
+    // ==========================================
+    let isDrawingMode = false;
+    let isDrawing = false;
+    const canvas = document.getElementById('draw-canvas');
+    const ctx = canvas.getContext('2d');
+    let strokeColor = 'red';
+    let lastX = 0, lastY = 0;
+
+    function toggleDrawingMode() {
+        isDrawingMode = !isDrawingMode;
+        const btn = document.getElementById('btn-draw-toggle');
+        const controls = document.getElementById('draw-controls');
+        const img = document.getElementById('fullscreen-img');
+
+        if (isDrawingMode) {
+            btn.classList.add('playing'); // Fica verde/destacado
+            controls.style.display = 'block';
+            canvas.style.display = 'block';
+            
+            // Ajusta o tamanho do canvas para casar exatamente com a imagem redimensionada
+            canvas.width = img.clientWidth;
+            canvas.height = img.clientHeight;
+            
+            // Configurações da caneta
+            ctx.lineJoin = 'round';
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = strokeColor;
+            
+            pararAutoScroll(); // Impede rolar enquanto desenha
+        } else {
+            btn.classList.remove('playing');
+            controls.style.display = 'none';
+            // Quando desativar, não escondemos o canvas se tiver desenho para ele não sumir antes de salvar
+        }
+    }
+
+    function changeColor(color, btnElement) {
+        strokeColor = color;
+        ctx.strokeStyle = strokeColor;
+        document.querySelectorAll('.btn-color').forEach(b => b.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+
+    // Função para pegar a posição exata do mouse/dedo em relação ao canvas
+    function getEventPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    }
+
+    function desenharComeco(e) {
+        if (!isDrawingMode) return;
+        isDrawing = true;
+        const pos = getEventPos(e);
+        lastX = pos.x;
+        lastY = pos.y;
+    }
+
+    function desenharMovimento(e) {
+        if (!isDrawingMode || !isDrawing) return;
+        e.preventDefault(); // Impede a tela de rolar no celular enquanto desenha
+        
+        const pos = getEventPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastX = pos.x;
+        lastY = pos.y;
+    }
+
+    function desenharFim() {
+        if (!isDrawingMode) return;
+        isDrawing = false;
+    }
+
+    // Eventos de Mouse (Computador)
+    canvas.addEventListener('mousedown', desenharComeco);
+    canvas.addEventListener('mousemove', desenharMovimento);
+    canvas.addEventListener('mouseup', desenharFim);
+    canvas.addEventListener('mouseout', desenharFim);
+
+    // Eventos de Touch (Celular/Tablet)
+    canvas.addEventListener('touchstart', desenharComeco, {passive: false});
+    canvas.addEventListener('touchmove', desenharMovimento, {passive: false});
+    canvas.addEventListener('touchend', desenharFim);
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function saveCanvasToImage() {
+        // Criar um canvas temporário para fundir a foto original com o rabisco
+        const img = document.getElementById('fullscreen-img');
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        // Desenha a imagem de fundo
+        tempCtx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+        // Desenha os rabiscos por cima
+        tempCtx.drawImage(canvas, 0, 0);
+
+        // Salva a nova imagem combinada
+        const novaFotoBase64 = tempCanvas.toDataURL('image/jpeg', 0.8);
+        
+        // Atualiza a imagem na tela e salva no repertório
+        img.src = novaFotoBase64;
+        escala[indexAtual].foto = novaFotoBase64;
+        salvarDadosLocal();
+        renderRepertorio();
+        
+        alert("Anotações salvas com sucesso!");
+        clearCanvas(); // Limpa o canvas transparente pois a imagem já tem o desenho
+        toggleDrawingMode(); // Sai do modo desenho
+    }
+
+    // UPDATE: Resetar o canvas sempre que fechar a tela cheia
+    const oldCloseFullscreen = closeFullscreen;
+    closeFullscreen = function() {
+        if(isDrawingMode) toggleDrawingMode(); // desativa se tiver ativo
+        clearCanvas();
+        canvas.style.display = 'none';
+        oldCloseFullscreen();
+    };
 
 </script>
 </body>
