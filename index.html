@@ -943,6 +943,32 @@
             text-align: center;
         }
 
+        /* --- OPÇÃO 3 e 4: STATUS DO ENSAIO E DIVISÃO DE VOZES --- */
+        .status-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        .status-nova { background-color: #ef4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); } /* Vermelho */
+        .status-revisar { background-color: #f59e0b; box-shadow: 0 0 6px rgba(245, 158, 11, 0.6); } /* Amarelo */
+        .status-pronta { background-color: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); } /* Verde */
+
+        .badge-vozes {
+            background: #6366f1; /* Cor Indigo/Roxa */
+            color: white;
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-left: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
     </style>
 </head>
 <body>
@@ -1003,6 +1029,21 @@
                 <input type="number" id="edit-bpm" placeholder="Ex: 68">
             </div>
         </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 12px; margin-top: 12px;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; margin-bottom: 5px; display: block;">Status do Ensaio</label>
+                        <select id="edit-status" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
+                            <option value="pronta">🟢 Pronta (Verde)</option>
+                            <option value="revisar">🟡 Revisar (Amarelo)</option>
+                            <option value="nova">🔴 Nova (Vermelho)</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; margin-bottom: 5px; display: block;">Vozes / Cantores</label>
+                        <input type="text" id="edit-vozes" placeholder="Ex: Todos, Mulheres..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); font-size: 13px;">
+                    </div>
+                </div>
         
         <div class="form-group">
             <label>Nome da Música</label>
@@ -1362,8 +1403,7 @@
     }
 
     function adicionarMusica() {
-        escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", anotacoes: "", yt: "", cifraLink: "", foto: null });
-        salvarDadosLocal(); 
+escala.push({ momento: "Novo Momento", nome: "Nova Música", tom: "", bpm: "", anotacoes: "", yt: "", cifraLink: "", foto: null, status: "pronta", vozes: "" });        salvarDadosLocal(); 
         renderRepertorio(); 
         openEditModal(escala.length - 1);
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -1393,6 +1433,8 @@
         document.getElementById('edit-anotacoes').value = musica.anotacoes || ""; 
         document.getElementById('edit-yt').value = musica.yt || "";
         document.getElementById('edit-cifra').value = musica.cifraLink || "";
+        document.getElementById('edit-status').value = musica.status || "pronta"; 
+        document.getElementById('edit-vozes').value = musica.vozes || "";
         
         tempPhotoBase64 = musica.foto; 
         updateModalPhotoUI(musica.foto);
@@ -2083,6 +2125,8 @@
         canvas.style.display = 'none';
         oldCloseFullscreen();
     };
+
+    
 
 </script>
 </body>
